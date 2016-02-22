@@ -14,17 +14,13 @@ while do_again == 'y'
       puts "Please enter a number."
       print "=>"
       new_number = gets.chomp
-      case 
-        
-      when operator == "+"
-        total = total.to_f + new_number.to_f
-      when operator == "-"
-        total = total.to_f - new_number.to_f
-      when operator == "*"
-        total = total.to_f * new_number.to_f
-      else  
-        total = total.to_f / new_number.to_f  
-      end
+      total = case operator
+                
+              when "+" then total.to_f + new_number.to_f
+              when "-" then total.to_f - new_number.to_f
+              when "*" then total.to_f * new_number.to_f
+              when "/" then total.to_f / new_number.to_f  
+              end
     else
       break
     end
