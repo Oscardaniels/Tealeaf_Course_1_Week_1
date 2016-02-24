@@ -8,11 +8,13 @@ def calculate(equation_array)
 
   equation_array.each_with_index do |element, index|
     if element == "*"
-      equation_array[index - 1] = equation_array[index - 1].to_f * equation_array[index + 1].to_f
+      equation_array[index - 1] = equation_array[index - 1].to_f * 
+                                  equation_array[index + 1].to_f
       delete_two_elements(equation_array, index)
       calculate(equation_array)
     elsif element == "/"
-      equation_array[index - 1] = equation_array[index - 1].to_f / equation_array[index + 1].to_f
+      equation_array[index - 1] = equation_array[index - 1].to_f / 
+                                  equation_array[index + 1].to_f
       delete_two_elements(equation_array, index)
       calculate(equation_array)
     else 
@@ -22,17 +24,17 @@ def calculate(equation_array)
 
   equation_array.each_with_index do |element, index|
     if element == "+"
-      equation_array[index - 1] = equation_array[index - 1].to_f + equation_array[index + 1].to_f
+      equation_array[index - 1] = equation_array[index - 1].to_f + 
+                                  equation_array[index + 1].to_f
       delete_two_elements(equation_array, index)
       calculate(equation_array)
     elsif element == "-"
-      equation_array[index - 1] = equation_array[index - 1].to_f - equation_array[index + 1].to_f
+      equation_array[index - 1] = equation_array[index - 1].to_f - 
+                                  equation_array[index + 1].to_f
       delete_two_elements(equation_array, index)
-    else 
-      next
     end     
   end
-return equation_array[0]
+  equation_array[0]
 end
 
 do_again = 'y'
