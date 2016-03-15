@@ -1,3 +1,4 @@
+require "pry"
 #Methods
 def draw_board(b)
   system "cls" #For Windows users
@@ -30,20 +31,60 @@ def player_pick(b)
   draw_board(b) 
 end
 
-def computer_pick(b)
-  available_squares = find_available_squares(b) 
-  choice = available_squares.keys.sample
-  b[choice] = "O"
-  draw_board(b)
+def can_computer_win(b, winning_rows)
+  winning_rows.each do |winning_row|
+    values = b.values_at(winning_row[0], winning_row[1], winning_row[2])
+    if values.count("O") == 2 && values.count(" ") == 1
+      b[winning_row.index(" ")] = "O"
+      winning_row.each do |square| 
+        if b[square] == " "
+          b[square] = "O"   
+        end
+      end
+      draw_board(b)
+      return true
+    end
+  end
+  false
+end
+
+def can_computer_block(b, winning_rows)
+  winning_rows.each do |winning_row|
+    values = b.values_at(winning_row[0], winning_row[1], winning_row[2])
+    if values.count("X") == 2 && values.count(" ") == 1
+      b[winning_row.index(" ")] = "O"
+      winning_row.each do |square| 
+        if b[square] == " "
+          b[square] = "O"   
+        end
+      end
+      draw_board(b)
+      return true
+    end
+  end
+  false
+end
+
+def computer_pick(b, winning_rows)
+  if can_computer_win(b, winning_rows)
+    return
+  elsif can_computer_block(b, winning_rows)      
+    return
+  else
+    available_squares = find_available_squares(b) 
+    choice = available_squares.keys.sample
+    b[choice] = "O"
+    draw_board(b)
+  end
+  
 end   
 
-def winner?(b, player_piece)
+def winner?(b, player_piece, winning_rows)
   game_over = false 
-  winning_rows = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
-  winning_rows.each do |winning_squares|
-    if b[winning_squares[0]] == player_piece &&  
-       b[winning_squares[1]] == player_piece &&  
-       b[winning_squares[2]] == player_piece
+  winning_rows.each do |winning_row|
+    if b[winning_row[0]] == player_piece &&  
+       b[winning_row[1]] == player_piece &&  
+       b[winning_row[2]] == player_piece
      game_over = true
     end
   end
@@ -52,19 +93,20 @@ end
 
 #variables
 board = {}
+winning_rows = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 
+#main program
 create_board(board)
 draw_board(board)
 
-#main program
 begin  
   player_pick(board)
-  if winner?(board, "X")
+  if winner?(board, "X", winning_rows)
     puts "\nPlayer Wins!"
     break
   end
-  computer_pick(board) 
-  if winner?(board, "O")
+  computer_pick(board, winning_rows) 
+  if winner?(board, "O", winning_rows)
     puts "\nComputer Wins!"
     break
   end
