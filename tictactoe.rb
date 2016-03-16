@@ -10,7 +10,7 @@ def draw_board(b)
   puts "  #{b[7]}  |  #{b[8]}  |  #{b[9]}"
 end
 
-def create_board(b)
+def initialize_board(b)
   (1..9).each {|num| b[num] = " "}
 end
 
@@ -55,7 +55,8 @@ def can_computer_block(b, winning_rows)
       b[winning_row.index(" ")] = "O"
       winning_row.each do |square| 
         if b[square] == " "
-          b[square] = "O"   
+          b[square] = "O"
+          binding.pry   
         end
       end
       draw_board(b)
@@ -96,7 +97,8 @@ board = {}
 winning_rows = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 
 #main program
-create_board(board)
+initialize_board(board)
+binding.pry
 draw_board(board)
 
 begin  
@@ -112,6 +114,6 @@ begin
   end
 end until !board_full?(board)
 
-if !board_full?(board)
+if !board_full?(board) && !winner?(board, "X", winning_rows) && !winner?(board, "O", winning_rows)
   puts "It's a tie. All squares are gone."
 end
