@@ -90,21 +90,27 @@ board = {}
 WINNING_ROWS = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 
 #main program
-initialize_board(board)
-draw_board(board)
-begin  
-  player_pick(board)
-  if winner?(board, "X")
-    puts "\nPlayer Wins!"
-    break
-  end
-  computer_pick(board) 
-  if winner?(board, "O")
-    puts "\nComputer Wins!"
-    break
-  end
-end until !board_full?(board)
+loop do
+  initialize_board(board)
+  draw_board(board)
+  begin  
+    player_pick(board)
+    if winner?(board, "X")
+      puts "\nPlayer Wins!"
+      break
+    end
+    computer_pick(board) 
+    if winner?(board, "O")
+      puts "\nComputer Wins!"
+      break
+    end
+  end until !board_full?(board)
 
-if !board_full?(board) && !winner?(board, "X") && !winner?(board, "O")
-  puts "It's a tie. All squares are gone."
+  if !board_full?(board) && !winner?(board, "X") && !winner?(board, "O")
+    puts "It's a tie. All squares are gone."
+  end
+  puts "\nWould you like to play again? y/n"
+  if gets.chomp.downcase != 'y'
+    break
+  end
 end
