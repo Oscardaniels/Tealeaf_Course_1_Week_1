@@ -46,7 +46,7 @@ end
 
 def can_computer_win?(b)
   WINNING_ROWS.each do |winning_row|
-    values = b.values_at(winning_row[0], winning_row[1], winning_row[2])
+    values = b.values_at(*winning_row)
     if values.count("O") == 2 && values.count(" ") == 1
       computer_move(b, winning_row)
       return true
@@ -57,7 +57,7 @@ end
 
 def can_computer_block?(b)
   WINNING_ROWS.each do |winning_row|
-    values = b.values_at(winning_row[0], winning_row[1], winning_row[2])
+    values = b.values_at(*winning_row)
     if values.count("X") == 2 && values.count(" ") == 1
       computer_move(b, winning_row)
       return true
