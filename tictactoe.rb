@@ -1,4 +1,3 @@
-require "pry"
 # Tic Tac Toe Program - Oscar Daniels
 #Methods
 def draw_board(b)
