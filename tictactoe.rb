@@ -15,7 +15,7 @@ def initialize_board(b)
 end
 
 def board_full?(b)
-  b.has_value?(" ")
+  !b.has_value?(" ")
 end
 
 def find_available_squares(b)
@@ -32,10 +32,12 @@ def player_pick(b)
 end
 
 def computer_pick(b)
-  if can_computer_win?(b)
-    return
-  elsif can_computer_block?(b)      
-    return
+  #winning_row = can_computer_win?(b)
+  #blocking_row = can_computer_block?(b)
+  if winning_row = can_computer_win?(b)
+    computer_move(b, winning_row) 
+  elsif blocking_row = can_computer_block?(b)
+    computer_move(b, blocking_row)      
   else
     available_squares = find_available_squares(b) 
     choice = available_squares.keys.sample
@@ -47,10 +49,7 @@ end
 def can_computer_win?(b)
   WINNING_ROWS.each do |winning_row|
     values = b.values_at(*winning_row)
-    if values.count("O") == 2 && values.count(" ") == 1
-      computer_move(b, winning_row)
-      return true
-    end
+    return winning_row if values.count("O") == 2 && values.count(" ") == 1
   end
   false
 end
@@ -58,10 +57,7 @@ end
 def can_computer_block?(b)
   WINNING_ROWS.each do |winning_row|
     values = b.values_at(*winning_row)
-    if values.count("X") == 2 && values.count(" ") == 1
-      computer_move(b, winning_row)
-      return true
-    end
+    return winning_row if values.count("X") == 2 && values.count(" ") == 1
   end
   false
 end
@@ -87,7 +83,10 @@ end
 
 #variables and constants
 board = {}
-WINNING_ROWS = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+WINNING_ROWS = [
+                [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], 
+                [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]
+               ]
 
 #main program
 loop do
@@ -104,13 +103,11 @@ loop do
       puts "\nComputer Wins!"
       break
     end
-  end until !board_full?(board)
+  end until board_full?(board)
 
-  if !board_full?(board) && !winner?(board, "X") && !winner?(board, "O")
+  if !winner?(board, "X") && !winner?(board, "O")
     puts "It's a tie. All squares are gone."
   end
   puts "\nWould you like to play again? y/n"
-  if gets.chomp.downcase != 'y'
-    break
-  end
+  break if gets.chomp.downcase != 'y'
 end
