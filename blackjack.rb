@@ -4,6 +4,7 @@ def say(msg, name)
 end
 
 def say_greeting(name)
+  # "Oscar"
   say("\n\nWelcome to Blackjack!", name)
   sleep 1
   say("What's your name?", name)
@@ -14,6 +15,7 @@ def say_greeting(name)
 end
 
 def deal_card(current_deck, dealt_cards, whose_turn)
+  # {" 3D" => 3, "10S" => 10 }, {:player => {" 4H" => 4}...}, :player
   system "cls"
   key = current_deck.keys.sample
   value = DECK.values_at(key).first
@@ -27,9 +29,10 @@ def initial_deal(current_deck, dealt_cards)
 end
 
 def update_totals(dealt_cards, total, whose_turn)
+  # total parameter {:player => 22, :computer => 19}
   total[whose_turn] = 0 
   dealt_cards[whose_turn].values.each do |card_value|
-    total[whose_turn] = total[whose_turn] + card_value
+    total[whose_turn] += card_value
   end
   if total[whose_turn] > 21 && unconverted_ace?(dealt_cards, whose_turn)
     ace_11_to_1_conversion(dealt_cards, whose_turn)
@@ -106,6 +109,9 @@ DECK = {
           " JD" => 10, " QD" => 10, " KD" => 10    
         }
 name = ""
+
+#Start Game
+
 name = say_greeting(name) 
 loop do
   dealt_cards = {player: {}, computer: {}}
@@ -116,6 +122,9 @@ loop do
   update_totals(dealt_cards,total, whose_turn)
   computers_hidden_card = hide_hole_card_from_display(dealt_cards)
   display_table(dealt_cards, total, whose_turn)
+
+#Player Turn
+
   while total[:player] < 21
     if hit_or_stay(name) == "h"
       deal_card(current_deck,dealt_cards, whose_turn)
@@ -125,12 +134,18 @@ loop do
       break
     end
   end
+
+# Display Player Results
+
   say_player_results(total, name)
   sleep 1
   if total[:player] > 21
     say("You busted!", name) 
   else 
     whose_turn = :computer
+
+# Computer Reveals Hole Card
+
     retrieve_hole_card(computers_hidden_card, dealt_cards)
     update_totals(dealt_cards, total, whose_turn)
     say("Computer's hole card is a #{computers_hidden_card}" + 
@@ -139,6 +154,9 @@ loop do
     system "cls"
     display_table(dealt_cards, total, whose_turn)
     sleep 2
+
+# Computer Turn
+
     while total[:computer] < total[:player] || total[:computer] < 17
       say("\nComputer hits.", name)
       sleep 1
@@ -148,6 +166,9 @@ loop do
       sleep 1     
     end   
   end
+
+# Display Computer Results
+
   say_computer_results(total, name) 
   say("\n#{name}, would you like to play again? (y/n)", name)
   exit if gets.chomp.downcase != "y"
