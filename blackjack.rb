@@ -1,15 +1,15 @@
 # blackjack - Oscar Daniels
-def say(msg, name)
+def say(msg)
   puts msg
 end
 
-def say_greeting(name)
+def say_greeting
   # "Oscar"
-  say("\n\nWelcome to Blackjack!", name)
+  say("\n\nWelcome to Blackjack!")
   sleep 1
-  say("What's your name?", name)
+  say("What's your name?")
   name = gets.chomp.capitalize
-  say("Hi #{name}. I'm shuffling the deck...", name)
+  say("Hi #{name}. I'm shuffling the deck...")
   sleep 2
   name
 end
@@ -51,9 +51,9 @@ end
 
 def hit_or_stay(name)
   begin
-  say("\n#{name}, would you like to hit or stay (h/s)", name)
-  choice = gets.chomp.downcase
-  end until choice == 'h' or choice == 's'
+    say("\n#{name}, would you like to hit or stay (h/s)")
+    choice = gets.chomp.downcase
+  end until choice == 'h' || choice == 's'
   choice
 end
 
@@ -81,38 +81,30 @@ def retrieve_hole_card(computers_hidden_card, dealt_cards)
 end
 
 def say_player_results(total, name)
-  say("\n#{name} stays at #{total[:player]}", name) if total[:player] < 21
-  say("\n21 will be tough to beat.", name) if total[:player] == 21
-  say("\nYou have #{total[:player]}.", name) if total[:player] > 21
+  say("\n#{name} stays at #{total[:player]}") if total[:player] < 21
+  say("\n21 will be tough to beat.") if total[:player] == 21
+  say("\nYou have #{total[:player]}.") if total[:player] > 21
 end
 
-def say_computer_results(total, name)
-  say("\nComputer wins!", name) if total[:computer] > total[:player] && 
-                                   total[:computer] <= 21
-  say("\nIt's a push.", name) if total[:computer] == total[:player]
-  say("\nComputer busted with #{total[:computer]}.", name) if total[:computer] > 21
+def say_computer_results(total)
+  say("\nComputer wins!") if total[:computer] > total[:player] && 
+                             total[:computer] <= 21
+  say("\nIt's a push.") if total[:computer] == total[:player]
+  say("\nComputer busted with #{total[:computer]}.") if total[:computer] > 21
   sleep 1
 end
 
 DECK = {
-          " AS" => 11,  " 2S" => 2,  " 3S" => 3, " 4S" => 4, " 5S" => 5, 
-          " 6S" => 6,  " 7S" => 7,  " 8S" => 8, " 9S" => 9, "10S" => 10,
-          " JS" => 10, " QS" => 10, " KS" => 10, 
-          " AC" => 11,  " 2C" => 2,  " 3C" => 3, " 4C" => 4, " 5C" => 5, 
-          " 6C" => 6,  " 7C" => 7,  " 8C" => 8, " 9C" => 9, "10C" => 10,
-          " JC" => 10, " QC" => 10, " KC" => 10,
-          " AH" => 11,  " 2H" => 2,  " 3H" => 3, " 4H" => 4, " 5H" => 5, 
-          " 6H" => 6,  " 7H" => 7,  " 8H" => 8, " 9H" => 9, "10H" => 10,
-          " JH" => 10, " QH" => 10, " KH" => 10,
-          " AD" => 11,  " 2D" => 2,  " 3D" => 3, " 4D" => 4, " 5D" => 5, 
-          " 6D" => 6,  " 7D" => 7,  " 8D" => 8, " 9D" => 9, "10D" => 10,
+          " AS" => 11,  
+          " AC" => 11,  
+          " AH" => 11,  
+          " AD" => 11, " 9D" => 9, "10D" => 10,
           " JD" => 10, " QD" => 10, " KD" => 10    
         }
-name = ""
 
 #Start Game
 
-name = say_greeting(name) 
+name = say_greeting
 loop do
   dealt_cards = {player: {}, computer: {}}
   total = {player: 0, computer: 0}
@@ -140,7 +132,7 @@ loop do
   say_player_results(total, name)
   sleep 1
   if total[:player] > 21
-    say("You busted!", name) 
+    say("You busted!") 
   else 
     whose_turn = :computer
 
@@ -149,7 +141,7 @@ loop do
     retrieve_hole_card(computers_hidden_card, dealt_cards)
     update_totals(dealt_cards, total, whose_turn)
     say("Computer's hole card is a #{computers_hidden_card}" + 
-        " for a total of #{total[:computer]}", name)
+        " for a total of #{total[:computer]}")
     sleep 3
     system "cls"
     display_table(dealt_cards, total, whose_turn)
@@ -158,7 +150,7 @@ loop do
 # Computer Turn
 
     while total[:computer] < total[:player] || total[:computer] < 17
-      say("\nComputer hits.", name)
+      say("\nComputer hits.")
       sleep 1
       deal_card(current_deck, dealt_cards, whose_turn)
       update_totals(dealt_cards, total, whose_turn)
@@ -169,7 +161,7 @@ loop do
 
 # Display Computer Results
 
-  say_computer_results(total, name) 
-  say("\n#{name}, would you like to play again? (y/n)", name)
+  say_computer_results(total) 
+  say("\n#{name}, would you like to play again? (y/n)")
   exit if gets.chomp.downcase != "y"
 end
